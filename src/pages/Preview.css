@@ -1,0 +1,69 @@
+/* =========================================
+   Preview Page Styles
+   ========================================= */
+
+.preview-page {
+  min-height: 100vh;
+}
+
+.preview-bar {
+  position: sticky;
+  top: 0;
+  z-index: var(--z-sticky);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--space-3) var(--space-6);
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+  box-shadow: var(--shadow-sm);
+}
+
+.preview-bar__back {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-size: var(--text-sm);
+  font-weight: var(--weight-medium);
+  color: var(--text-secondary);
+  transition: color var(--duration-fast);
+}
+
+.preview-bar__back:hover {
+  color: var(--color-rose-gold);
+}
+
+.preview-bar__info {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.preview-bar__label {
+  font-size: var(--text-xs);
+  color: var(--text-muted);
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+}
+
+.preview-bar__name {
+  font-size: var(--text-lg);
+  font-weight: var(--weight-semibold);
+}
+
+.preview-content {
+  /* Template renders here */
+}
+
+@media (max-width: 768px) {
+  .preview-bar {
+    padding: var(--space-2) var(--space-4);
+    gap: var(--space-2);
+  }
+
+  .preview-bar__info {
+    display: none;
+  }
+}

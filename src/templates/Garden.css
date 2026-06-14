@@ -1,0 +1,403 @@
+/* =========================================
+   Garden Template — Romantic Botanical
+   ========================================= */
+
+.garden {
+  --gd-bg: #FDF6F0;
+  --gd-blush: #F9EFEA;
+  --gd-pink: #D4A0A0;
+  --gd-sage: #8BA888;
+  --gd-sage-dark: #6B7F5E;
+  --gd-text: #4A3F3F;
+  --gd-muted: #9B8E8E;
+  --gd-card: #FFFFFF;
+  background: var(--gd-bg);
+  color: var(--gd-text);
+}
+
+/* Hero */
+.gd-hero {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+  background:
+    radial-gradient(ellipse at 50% 0%, rgba(212,160,160,0.1) 0%, transparent 50%),
+    radial-gradient(ellipse at 30% 70%, rgba(139,168,136,0.08) 0%, transparent 50%),
+    var(--gd-bg);
+  padding: var(--space-16) var(--space-6);
+}
+
+.gd-hero__florals {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.gd-hero__floral {
+  position: absolute;
+  font-size: 3rem;
+  opacity: 0.3;
+  animation: float 6s ease-in-out infinite;
+}
+
+.gd-hero__floral--tl { top: 10%; left: 5%; animation-delay: 0s; }
+.gd-hero__floral--tr { top: 15%; right: 8%; animation-delay: 1.5s; }
+.gd-hero__floral--bl { bottom: 15%; left: 8%; animation-delay: 3s; }
+.gd-hero__floral--br { bottom: 10%; right: 5%; animation-delay: 4.5s; }
+
+.gd-hero__content {
+  position: relative;
+  z-index: 1;
+}
+
+.gd-hero__frame {
+  padding: var(--space-12);
+  border: 2px solid rgba(212,160,160,0.3);
+  border-radius: var(--radius-xl);
+  position: relative;
+  max-width: 550px;
+  margin: 0 auto;
+}
+
+.gd-hero__frame::before,
+.gd-hero__frame::after {
+  content: '❀';
+  position: absolute;
+  color: var(--gd-pink);
+  opacity: 0.4;
+  font-size: 1.2rem;
+}
+
+.gd-hero__frame::before {
+  top: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.gd-hero__frame::after {
+  bottom: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.gd-hero__label {
+  font-size: var(--text-sm);
+  color: var(--gd-muted);
+  letter-spacing: var(--tracking-wider);
+  margin-bottom: var(--space-4);
+}
+
+.gd-hero__names {
+  font-size: var(--text-hero);
+  color: var(--gd-pink);
+  line-height: var(--leading-tight);
+}
+
+.gd-hero__flourish {
+  display: flex;
+  justify-content: center;
+  margin: var(--space-4) 0;
+}
+
+.gd-hero__leaf {
+  color: var(--gd-sage);
+}
+
+.gd-hero__invite {
+  font-size: var(--text-sm);
+  color: var(--gd-muted);
+  font-style: italic;
+  margin-bottom: var(--space-4);
+}
+
+.gd-hero__date {
+  font-family: var(--font-heading);
+  font-size: var(--text-xl);
+  font-weight: var(--weight-semibold);
+  color: var(--gd-text);
+  letter-spacing: var(--tracking-wider);
+  margin-bottom: var(--space-2);
+}
+
+.gd-hero__venue {
+  font-size: var(--text-sm);
+  color: var(--gd-muted);
+}
+
+.gd-hero__countdown {
+  margin-top: var(--space-10);
+}
+
+/* Sections */
+.gd-section {
+  padding: var(--space-24) 0;
+}
+
+.gd-section--blush {
+  background: var(--gd-blush);
+}
+
+.gd-section__header {
+  text-align: center;
+  margin-bottom: var(--space-12);
+}
+
+.gd-section__icon {
+  color: var(--gd-pink);
+  margin-bottom: var(--space-3);
+}
+
+.gd-title {
+  font-size: var(--text-5xl);
+  color: var(--gd-pink);
+}
+
+.gd-section__subtitle {
+  font-size: var(--text-base);
+  color: var(--gd-muted);
+  max-width: 500px;
+  margin: var(--space-3) auto 0;
+  line-height: var(--leading-relaxed);
+}
+
+/* Story / Bios */
+.gd-story__bios {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-8);
+  margin-bottom: var(--space-12);
+  flex-wrap: wrap;
+}
+
+.gd-bio {
+  text-align: center;
+  max-width: 300px;
+}
+
+.gd-bio__avatar {
+  width: 80px;
+  height: 80px;
+  border-radius: var(--radius-full);
+  background: linear-gradient(135deg, var(--gd-pink), rgba(212,160,160,0.5));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-heading);
+  font-size: var(--text-3xl);
+  color: white;
+  margin: 0 auto var(--space-4);
+  border: 3px solid white;
+  box-shadow: var(--shadow-md);
+}
+
+.gd-bio__name {
+  font-size: var(--text-xl);
+  font-weight: var(--weight-semibold);
+  margin-bottom: var(--space-2);
+}
+
+.gd-bio__text {
+  font-size: var(--text-sm);
+  color: var(--gd-muted);
+  line-height: var(--leading-relaxed);
+}
+
+.gd-bio__heart {
+  font-size: var(--text-4xl);
+  color: var(--gd-pink);
+}
+
+/* Events */
+.gd-events__list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  max-width: 700px;
+  margin: 0 auto var(--space-8);
+}
+
+.gd-event-card {
+  display: flex;
+  gap: var(--space-5);
+  padding: var(--space-6);
+  background: var(--gd-card);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+  border: 1px solid rgba(212,160,160,0.15);
+  transition: all var(--duration-normal) var(--ease-out);
+}
+
+.gd-event-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+  border-color: var(--gd-pink);
+}
+
+.gd-event-card__leaf {
+  font-size: 1.5rem;
+  flex-shrink: 0;
+  margin-top: var(--space-1);
+}
+
+.gd-event-card__content {
+  flex: 1;
+}
+
+.gd-event-card__date {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-size: var(--text-xs);
+  letter-spacing: var(--tracking-wider);
+  text-transform: uppercase;
+  color: var(--gd-sage);
+  margin-bottom: var(--space-2);
+}
+
+.gd-event-card__title {
+  font-size: var(--text-xl);
+  font-weight: var(--weight-semibold);
+  margin-bottom: var(--space-2);
+}
+
+.gd-event-card__info {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-size: var(--text-sm);
+  color: var(--gd-muted);
+  margin-bottom: var(--space-3);
+  flex-wrap: wrap;
+}
+
+.gd-event-card__desc {
+  font-size: var(--text-sm);
+  color: var(--gd-muted);
+  line-height: var(--leading-relaxed);
+}
+
+.gd-dresscode {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  padding: var(--space-4);
+  background: var(--gd-card);
+  border-radius: var(--radius-full);
+  font-size: var(--text-sm);
+  color: var(--gd-text);
+  width: fit-content;
+  margin: 0 auto;
+  box-shadow: var(--shadow-xs);
+  border: 1px solid rgba(212,160,160,0.15);
+}
+
+/* Registry */
+.gd-registry__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: var(--space-4);
+}
+
+.gd-registry-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-8);
+  background: var(--gd-card);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+  border: 1px solid rgba(212,160,160,0.15);
+  text-align: center;
+  transition: all var(--duration-normal) var(--ease-out);
+  color: var(--gd-text);
+  position: relative;
+}
+
+.gd-registry-card:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-md);
+  border-color: var(--gd-pink);
+}
+
+.gd-registry-card__icon {
+  color: var(--gd-sage);
+}
+
+.gd-registry-card h3 {
+  font-size: var(--text-lg);
+}
+
+.gd-registry-card p {
+  font-size: var(--text-xs);
+  color: var(--gd-muted);
+}
+
+.gd-registry-card__ext {
+  position: absolute;
+  top: var(--space-3);
+  right: var(--space-3);
+  color: var(--gd-muted);
+}
+
+/* Footer */
+.gd-footer {
+  text-align: center;
+  padding: var(--space-16) 0;
+  background: var(--gd-sage-dark);
+  color: var(--gd-bg);
+}
+
+.gd-footer__florals {
+  font-size: 1.5rem;
+  margin-bottom: var(--space-6);
+  letter-spacing: var(--space-3);
+}
+
+.gd-footer__names {
+  font-size: var(--text-4xl);
+  margin-bottom: var(--space-3);
+  color: var(--gd-bg);
+}
+
+.gd-footer__date {
+  font-size: var(--text-sm);
+  letter-spacing: var(--tracking-wider);
+  opacity: 0.8;
+  margin-bottom: var(--space-2);
+}
+
+.gd-footer__hashtag {
+  font-size: var(--text-sm);
+  letter-spacing: var(--tracking-wide);
+  opacity: 0.7;
+}
+
+@media (max-width: 768px) {
+  .gd-hero__names {
+    font-size: var(--text-5xl);
+  }
+
+  .gd-hero__frame {
+    padding: var(--space-8);
+  }
+
+  .gd-section {
+    padding: var(--space-16) 0;
+  }
+
+  .gd-story__bios {
+    flex-direction: column;
+    gap: var(--space-4);
+  }
+
+  .gd-bio__heart {
+    transform: rotate(90deg);
+  }
+}

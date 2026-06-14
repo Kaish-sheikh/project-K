@@ -1,0 +1,130 @@
+/* =========================================
+   Countdown Timer Styles
+   ========================================= */
+
+.countdown {
+  display: flex;
+  gap: var(--space-6);
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.countdown__unit {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-3);
+  animation: fadeInUp 0.6s var(--ease-out) both;
+}
+
+.countdown__card {
+  width: 90px;
+  height: 100px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-lg);
+  position: relative;
+  overflow: hidden;
+  transition: transform var(--duration-normal) var(--ease-spring);
+}
+
+.countdown__card:hover {
+  transform: scale(1.05);
+}
+
+.countdown--light .countdown__card {
+  background: white;
+  box-shadow: var(--shadow-md);
+  border: 1px solid rgba(0,0,0,0.04);
+}
+
+.countdown--dark .countdown__card {
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.countdown--gold .countdown__card {
+  background: rgba(212, 175, 55, 0.1);
+  border: 1px solid rgba(212, 175, 55, 0.25);
+}
+
+.countdown__value {
+  font-family: var(--font-heading);
+  font-size: var(--text-4xl);
+  font-weight: var(--weight-bold);
+  line-height: 1;
+}
+
+.countdown--light .countdown__value {
+  color: var(--text-primary);
+}
+
+.countdown--dark .countdown__value {
+  color: var(--color-cream);
+}
+
+.countdown--gold .countdown__value {
+  background: linear-gradient(135deg, var(--color-gold-light), var(--color-gold));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.countdown__label {
+  font-size: var(--text-xs);
+  font-weight: var(--weight-semibold);
+  letter-spacing: var(--tracking-widest);
+  text-transform: uppercase;
+}
+
+.countdown--light .countdown__label {
+  color: var(--text-muted);
+}
+
+.countdown--dark .countdown__label {
+  color: var(--color-warm-gray);
+}
+
+.countdown--gold .countdown__label {
+  color: var(--color-gold);
+}
+
+.countdown__passed {
+  font-size: var(--text-3xl);
+  font-style: italic;
+}
+
+/* Divider colon between units */
+.countdown__unit:not(:last-child)::after {
+  content: ':';
+  position: absolute;
+  right: calc(-1 * var(--space-3) - 4px);
+  top: 50%;
+  transform: translateY(-70%);
+  font-family: var(--font-heading);
+  font-size: var(--text-3xl);
+  color: var(--color-rose-gold);
+  opacity: 0.5;
+}
+
+.countdown__unit {
+  position: relative;
+}
+
+@media (max-width: 480px) {
+  .countdown {
+    gap: var(--space-3);
+  }
+
+  .countdown__card {
+    width: 70px;
+    height: 80px;
+  }
+
+  .countdown__value {
+    font-size: var(--text-3xl);
+  }
+}
