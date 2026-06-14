@@ -30,6 +30,15 @@ export async function initDb() {
   // Run schema
   const schema = readFileSync(SCHEMA_PATH, 'utf-8');
   db.run(schema);
+
+  // Run migrations for existing databases (idempotent)
+  try {
+    db.run(`ALTER TABLE guests ADD COLUMN song_request TEXT DEFAULT NULL`);
+    console.log('✓ Migration applied: song_request column added');
+  } catch (e) {
+    // Column already exists — safe to ignore
+  }
+
   saveDb();
 
   console.log('✓ Database initialized at', DB_PATH);

@@ -26,7 +26,7 @@ router.post('/weddings/:weddingId/rsvp', rsvpLimiter, honeypotCheck('website'), 
       return res.status(404).json({ error: 'Wedding not found' });
     }
 
-    const { name, email, attending, guests, meal, dietary, message } = req.body;
+    const { name, email, attending, guests, meal, dietary, message, songRequest } = req.body;
 
     if (!name || !email) {
       return res.status(400).json({ error: 'Name and email are required' });
@@ -48,6 +48,9 @@ router.post('/weddings/:weddingId/rsvp', rsvpLimiter, honeypotCheck('website'), 
     if (dietary && !isValidLength(dietary, 500)) {
       return res.status(400).json({ error: 'Dietary notes must be 500 characters or less' });
     }
+    if (songRequest && !isValidLength(songRequest, 300)) {
+      return res.status(400).json({ error: 'Song request must be 300 characters or less' });
+    }
 
     // Sanitize guest count
     const guestCount = Math.min(Math.max(Number(guests) || 1, 1), 10);
@@ -59,7 +62,7 @@ router.post('/weddings/:weddingId/rsvp', rsvpLimiter, honeypotCheck('website'), 
       // Update existing RSVP
       run(
         `UPDATE guests
-         SET name = ?, rsvp = ?, attending = ?, guests_count = ?, meal = ?, dietary = ?, message = ?, submitted_at = datetime('now')
+         SET name = ?, rsvp = ?, attending = ?, guests_count = ?, meal = ?, dietary = ?, message = ?, song_request = ?, submitted_at = datetime('now')
          WHERE id = ?`,
         [
           name,
@@ -69,6 +72,7 @@ router.post('/weddings/:weddingId/rsvp', rsvpLimiter, honeypotCheck('website'), 
           meal || null,
           dietary || null,
           message || '',
+          songRequest || null,
           existingRsvp.id,
         ]
       );
@@ -80,8 +84,8 @@ router.post('/weddings/:weddingId/rsvp', rsvpLimiter, honeypotCheck('website'), 
     const guestId = uuidv4();
 
     run(
-      `INSERT INTO guests (id, wedding_id, name, email, rsvp, attending, guests_count, meal, dietary, message)
-       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+      `INSERT INTO guests (id, wedding_id, name, email, rsvp, attending, guests_count, meal, dietary, message, song_request)
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
       [
         guestId,
         weddingId,
@@ -93,6 +97,7 @@ router.post('/weddings/:weddingId/rsvp', rsvpLimiter, honeypotCheck('website'), 
         meal || null,
         dietary || null,
         message || '',
+        songRequest || null,
       ]
     );
 
@@ -132,6 +137,7 @@ router.get('/weddings/:weddingId/guests', requireAuth, (req, res) => {
       meal: g.meal,
       dietary: g.dietary,
       message: g.message,
+      songRequest: g.song_request,
       submittedAt: g.submitted_at,
     }));
 
@@ -172,6 +178,8 @@ router.get('/weddings/:weddingId/stats', requireAuth, (req, res) => {
       }
     });
 
+    const totalSongs = guests.filter(g => g.song_request).length;
+
     res.json({
       total,
       attending: attending.length,
@@ -179,6 +187,7 @@ router.get('/weddings/:weddingId/stats', requireAuth, (req, res) => {
       pending: pending.length,
       totalGuests,
       meals,
+      totalSongs,
       attendingPercent: total > 0 ? Math.round((attending.length / total) * 100) : 0,
     });
   } catch (err) {
@@ -204,7 +213,7 @@ router.put('/guests/:guestId', requireAuth, (req, res) => {
       return res.status(404).json({ error: 'Guest not found or access denied' });
     }
 
-    const { name, email, rsvp, meal, dietary, guests, message } = req.body;
+    const { name, email, rsvp, meal, dietary, guests, message, songRequest } = req.body;
 
     run(
       `UPDATE guests
@@ -214,9 +223,10 @@ router.put('/guests/:guestId', requireAuth, (req, res) => {
            meal = COALESCE(?, meal),
            dietary = COALESCE(?, dietary),
            guests_count = COALESCE(?, guests_count),
-           message = COALESCE(?, message)
+           message = COALESCE(?, message),
+           song_request = COALESCE(?, song_request)
        WHERE id = ?`,
-      [name, email, rsvp, meal, dietary, guests, message, guestId]
+      [name, email, rsvp, meal, dietary, guests, message, songRequest, guestId]
     );
 
     res.json({ message: 'Guest updated' });
@@ -249,6 +259,40 @@ router.delete('/guests/:guestId', requireAuth, (req, res) => {
   } catch (err) {
     console.error('Delete guest error:', err);
     res.status(500).json({ error: 'Failed to delete guest' });
+  }
+});
+
+// ------------------------------------------
+// GET /api/weddings/:weddingId/songs — Get all song requests (auth required)
+// ------------------------------------------
+router.get('/weddings/:weddingId/songs', requireAuth, (req, res) => {
+  try {
+    const { weddingId } = req.params;
+
+    // Verify ownership
+    const wedding = getOne('SELECT id FROM weddings WHERE id = ? AND user_id = ?', [weddingId, req.user.id]);
+    if (!wedding) {
+      return res.status(404).json({ error: 'Wedding not found or access denied' });
+    }
+
+    const songs = getAll(
+      `SELECT name, song_request, submitted_at
+       FROM guests
+       WHERE wedding_id = ? AND song_request IS NOT NULL AND song_request != ''
+       ORDER BY submitted_at DESC`,
+      [weddingId]
+    );
+
+    const formatted = songs.map(s => ({
+      guestName: s.name,
+      songRequest: s.song_request,
+      submittedAt: s.submitted_at,
+    }));
+
+    res.json(formatted);
+  } catch (err) {
+    console.error('Get songs error:', err);
+    res.status(500).json({ error: 'Failed to fetch song requests' });
   }
 });
 

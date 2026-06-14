@@ -112,6 +112,10 @@ export async function getPublicWedding(weddingId) {
   return fetchAPI(`/weddings/${weddingId}/public`);
 }
 
+export async function getSongs(weddingId) {
+  return fetchAPI(`/weddings/${weddingId}/songs`);
+}
+
 // ------------------------------------------
 // RSVP / Guests
 // ------------------------------------------

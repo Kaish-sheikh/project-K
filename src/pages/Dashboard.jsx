@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import {
   Users, UserCheck, UserX, Clock, Search, Download,
   Filter, BarChart3, Eye, Settings, Bell, TrendingUp,
-  Utensils, ArrowLeft, Loader2, RefreshCw, LogOut, Trash2
+  Utensils, ArrowLeft, Loader2, RefreshCw, LogOut, Trash2, Music2
 } from 'lucide-react';
 import Navbar from '../components/Navbar';
 import { useAuth } from '../context/AuthContext';
@@ -72,7 +72,8 @@ function MiniPieChart({ data }) {
 export default function Dashboard() {
   const { weddingId, logout, user } = useAuth();
   const [guests, setGuests] = useState([]);
-  const [stats, setStats] = useState({ total: 0, attending: 0, declined: 0, pending: 0, totalGuests: 0, meals: {}, attendingPercent: 0 });
+  const [songs, setSongs] = useState([]);
+  const [stats, setStats] = useState({ total: 0, attending: 0, declined: 0, pending: 0, totalGuests: 0, totalSongs: 0, meals: {}, attendingPercent: 0 });
   const [searchQuery, setSearchQuery] = useState('');
   const [filterStatus, setFilterStatus] = useState('all');
   const [loading, setLoading] = useState(true);
@@ -85,12 +86,14 @@ export default function Dashboard() {
     else setLoading(true);
 
     try {
-      const [guestsData, statsData] = await Promise.all([
+      const [guestsData, statsData, songsData] = await Promise.all([
         api.getGuests(weddingId),
         api.getStats(weddingId),
+        api.getSongs(weddingId),
       ]);
       setGuests(guestsData);
       setStats(statsData);
+      setSongs(songsData);
     } catch (err) {
       console.error('Failed to load dashboard data:', err);
       // Fall back to computing stats locally if stats endpoint fails
@@ -125,9 +128,9 @@ export default function Dashboard() {
   });
 
   const exportCSV = () => {
-    const headers = 'Name,Email,RSVP,Meal,Guests,Message\n';
+    const headers = 'Name,Email,RSVP,Meal,Guests,Message,Song Request\n';
     const rows = guests.map(g =>
-      `"${g.name}","${g.email}","${g.rsvp}","${g.meal || ''}",${g.guests},"${g.message}"`
+      `"${g.name}","${g.email}","${g.rsvp}","${g.meal || ''}",${g.guests},"${g.message}","${g.songRequest || ''}"`
     ).join('\n');
     const blob = new Blob([headers + rows], { type: 'text/csv' });
     const url = URL.createObjectURL(blob);
@@ -247,6 +250,13 @@ export default function Dashboard() {
                 <span className="stat-card__label">Pending</span>
               </div>
             </div>
+            <div className="stat-card stat-card--songs">
+              <div className="stat-card__icon"><Music2 size={20} /></div>
+              <div className="stat-card__info">
+                <span className="stat-card__value">{stats.totalSongs || 0}</span>
+                <span className="stat-card__label">Song Requests</span>
+              </div>
+            </div>
           </div>
 
           {/* Charts & Meals Row */}
@@ -336,6 +346,7 @@ export default function Dashboard() {
                     <th>RSVP</th>
                     <th>Meal</th>
                     <th>Guests</th>
+                    <th>Song Request</th>
                     <th>Message</th>
                     <th></th>
                   </tr>
@@ -352,6 +363,14 @@ export default function Dashboard() {
                       </td>
                       <td>{guest.meal || '—'}</td>
                       <td>{guest.guests}</td>
+                      <td className="dashboard__td-song">
+                        {guest.songRequest ? (
+                          <span className="dashboard__song-badge">
+                            <Music2 size={12} />
+                            {guest.songRequest}
+                          </span>
+                        ) : '—'}
+                      </td>
                       <td className="dashboard__td-message">{guest.message || '—'}</td>
                       <td>
                         <button
@@ -373,6 +392,42 @@ export default function Dashboard() {
                 </div>
               )}
             </div>
+          </div>
+
+          {/* Song Requests Panel */}
+          <div className="dashboard__songs-section" id="dash-songs">
+            <div className="dashboard__songs-header">
+              <h3 className="dashboard__table-title font-heading">
+                <Music2 size={20} /> Song Requests
+              </h3>
+              <span className="dashboard__songs-count">{songs.length} {songs.length === 1 ? 'song' : 'songs'}</span>
+            </div>
+            {songs.length > 0 ? (
+              <div className="dashboard__songs-grid">
+                {songs.map((song, idx) => {
+                  const parts = song.songRequest.split(' — ');
+                  const title = parts[0];
+                  const artist = parts[1] || null;
+                  return (
+                    <div key={idx} className="song-card" id={`song-card-${idx}`}>
+                      <div className="song-card__icon">
+                        <Music2 size={18} />
+                      </div>
+                      <div className="song-card__info">
+                        <span className="song-card__title">{title}</span>
+                        {artist && <span className="song-card__artist">{artist}</span>}
+                        <span className="song-card__guest">Requested by {song.guestName}</span>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            ) : (
+              <div className="dashboard__songs-empty">
+                <Music2 size={40} style={{ opacity: 0.2 }} />
+                <p>No song requests yet. They'll appear here after guests RSVP!</p>
+              </div>
+            )}
           </div>
         </main>
       </div>

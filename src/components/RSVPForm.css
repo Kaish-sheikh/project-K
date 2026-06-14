@@ -293,6 +293,30 @@
   text-align: center;
 }
 
+/* Song Request Step */
+.rsvp__step-icon--music {
+  background: linear-gradient(135deg, #e8d5f5, #d5b8f0);
+  color: #8b5cf6;
+}
+
+.rsvp--dark .rsvp__step-icon--music,
+.rsvp--gold .rsvp__step-icon--music {
+  background: rgba(139, 92, 246, 0.15);
+  color: #a78bfa;
+}
+
+.rsvp__song-hint {
+  color: var(--text-secondary);
+  font-size: var(--text-sm);
+  text-align: center;
+  line-height: 1.5;
+}
+
+.rsvp--dark .rsvp__song-hint,
+.rsvp--gold .rsvp__song-hint {
+  color: rgba(255,255,255,0.6);
+}
+
 /* Actions */
 .rsvp__actions {
   display: flex;

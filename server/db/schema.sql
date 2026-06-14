@@ -37,6 +37,7 @@ CREATE TABLE IF NOT EXISTS guests (
   meal TEXT,
   dietary TEXT,
   message TEXT DEFAULT '',
+  song_request TEXT DEFAULT NULL,
   submitted_at TEXT DEFAULT (datetime('now')),
   FOREIGN KEY (wedding_id) REFERENCES weddings(id) ON DELETE CASCADE
 );

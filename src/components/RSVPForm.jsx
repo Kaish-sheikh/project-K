@@ -1,9 +1,9 @@
 import { useState } from 'react';
-import { Send, Check, ChevronRight, ChevronLeft, User, Utensils, MessageSquare, Users, Loader2, AlertCircle } from 'lucide-react';
+import { Send, Check, ChevronRight, ChevronLeft, User, Utensils, MessageSquare, Users, Loader2, AlertCircle, Music2 } from 'lucide-react';
 import * as api from '../api/client';
 import './RSVPForm.css';
 
-const STEPS = ['name', 'attending', 'meal', 'message'];
+const STEPS = ['name', 'attending', 'meal', 'message', 'song'];
 const MEALS = ['Beef Tenderloin', 'Pan-Seared Salmon', 'Herb-Crusted Chicken', 'Wild Mushroom Risotto (Vegetarian)', 'Garden Medley (Vegan)'];
 
 export default function RSVPForm({ variant = 'light', onSubmit, weddingId }) {
@@ -19,6 +19,8 @@ export default function RSVPForm({ variant = 'light', onSubmit, weddingId }) {
     meal: '',
     dietary: '',
     message: '',
+    songTitle: '',
+    songArtist: '',
   });
   // Honeypot field — invisible to users, bots fill it
   const [honeypot, setHoneypot] = useState('');
@@ -39,19 +41,24 @@ export default function RSVPForm({ variant = 'light', onSubmit, weddingId }) {
     setSubmitError('');
     setSubmitting(true);
 
+    // Combine song title + artist into one field
+    const songRequest = formData.songTitle
+      ? `${formData.songTitle}${formData.songArtist ? ` — ${formData.songArtist}` : ''}`
+      : null;
+
     try {
       // Try to submit to backend if weddingId is available
       if (weddingId) {
-        await api.submitRSVP(weddingId, { ...formData, website: honeypot });
+        await api.submitRSVP(weddingId, { ...formData, songRequest, website: honeypot });
       }
 
       setSubmitted(true);
-      if (onSubmit) onSubmit(formData);
+      if (onSubmit) onSubmit({ ...formData, songRequest });
     } catch (err) {
       console.error('RSVP submission error:', err);
       // Still show success for UX — the data was captured locally
       setSubmitted(true);
-      if (onSubmit) onSubmit(formData);
+      if (onSubmit) onSubmit({ ...formData, songRequest });
     } finally {
       setSubmitting(false);
     }
@@ -209,6 +216,47 @@ export default function RSVPForm({ variant = 'light', onSubmit, weddingId }) {
               id="rsvp-message"
             />
           </div>
+          {submitError && (
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: '#c0392b', fontSize: '0.85rem', marginTop: '0.5rem' }}>
+              <AlertCircle size={14} />
+              <span>{submitError}</span>
+            </div>
+          )}
+        </div>
+
+        {/* Step 5: Song Request */}
+        <div className={`rsvp__step ${step === 4 ? 'rsvp__step--active' : ''}`}>
+          <div className="rsvp__step-icon rsvp__step-icon--music"><Music2 size={28} /></div>
+          <h3 className="rsvp__step-title font-heading">Song Request 🎵</h3>
+          {formData.attending === false ? (
+            <p className="rsvp__skip-text">No song request needed. You can skip this step.</p>
+          ) : (
+            <>
+              <p className="rsvp__song-hint">Got a song that'll get everyone on the dance floor? Let us know!</p>
+              <div className="rsvp__field">
+                <input
+                  type="text"
+                  placeholder="Song title (e.g. Can't Help Falling in Love)"
+                  value={formData.songTitle}
+                  onChange={e => updateField('songTitle', e.target.value)}
+                  className="rsvp__input"
+                  id="rsvp-song-title"
+                  maxLength={150}
+                />
+              </div>
+              <div className="rsvp__field">
+                <input
+                  type="text"
+                  placeholder="Artist (e.g. Elvis Presley)"
+                  value={formData.songArtist}
+                  onChange={e => updateField('songArtist', e.target.value)}
+                  className="rsvp__input"
+                  id="rsvp-song-artist"
+                  maxLength={100}
+                />
+              </div>
+            </>
+          )}
           {submitError && (
             <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: '#c0392b', fontSize: '0.85rem', marginTop: '0.5rem' }}>
               <AlertCircle size={14} />
