@@ -78,6 +78,7 @@ export default function Dashboard() {
   const [filterStatus, setFilterStatus] = useState('all');
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
+  const [activeTab, setActiveTab] = useState('overview');
 
   const loadData = async (showRefresh = false) => {
     if (!weddingId) return;
@@ -166,18 +167,36 @@ export default function Dashboard() {
             </Link>
           </div>
           <nav className="dashboard__nav-links">
-            <a href="#" className="dashboard__nav-link dashboard__nav-link--active" id="dash-nav-overview">
+            <button 
+              className={`dashboard__nav-link ${activeTab === 'overview' ? 'dashboard__nav-link--active' : ''}`} 
+              onClick={() => setActiveTab('overview')}
+              id="dash-nav-overview"
+            >
               <BarChart3 size={18} /> Overview
-            </a>
-            <a href="#" className="dashboard__nav-link" id="dash-nav-guests">
+            </button>
+            <button 
+              className={`dashboard__nav-link ${activeTab === 'guests' ? 'dashboard__nav-link--active' : ''}`} 
+              onClick={() => setActiveTab('guests')}
+              id="dash-nav-guests"
+            >
               <Users size={18} /> Guest List
-            </a>
-            <a href="#" className="dashboard__nav-link" id="dash-nav-site">
+            </button>
+            <a 
+              href={`/preview?weddingId=${weddingId}`} 
+              target="_blank" 
+              rel="noopener noreferrer" 
+              className="dashboard__nav-link" 
+              id="dash-nav-site"
+            >
               <Eye size={18} /> My Website
             </a>
-            <a href="#" className="dashboard__nav-link" id="dash-nav-settings">
+            <button 
+              className={`dashboard__nav-link ${activeTab === 'settings' ? 'dashboard__nav-link--active' : ''}`} 
+              onClick={() => setActiveTab('settings')}
+              id="dash-nav-settings"
+            >
               <Settings size={18} /> Settings
-            </a>
+            </button>
           </nav>
           <div style={{ marginTop: 'auto', padding: '1rem' }}>
             <button
@@ -220,215 +239,278 @@ export default function Dashboard() {
           </div>
 
           {/* Stats Cards */}
-          <div className="dashboard__stats" id="dash-stats">
-            <div className="stat-card stat-card--total">
-              <div className="stat-card__icon"><Users size={20} /></div>
-              <div className="stat-card__info">
-                <span className="stat-card__value">{stats.total}</span>
-                <span className="stat-card__label">Total Invited</span>
-              </div>
-            </div>
-            <div className="stat-card stat-card--attending">
-              <div className="stat-card__icon"><UserCheck size={20} /></div>
-              <div className="stat-card__info">
-                <span className="stat-card__value">{stats.attending}</span>
-                <span className="stat-card__label">Attending</span>
-              </div>
-              <span className="stat-card__badge">{stats.totalGuests} guests</span>
-            </div>
-            <div className="stat-card stat-card--declined">
-              <div className="stat-card__icon"><UserX size={20} /></div>
-              <div className="stat-card__info">
-                <span className="stat-card__value">{stats.declined}</span>
-                <span className="stat-card__label">Declined</span>
-              </div>
-            </div>
-            <div className="stat-card stat-card--pending">
-              <div className="stat-card__icon"><Clock size={20} /></div>
-              <div className="stat-card__info">
-                <span className="stat-card__value">{stats.pending}</span>
-                <span className="stat-card__label">Pending</span>
-              </div>
-            </div>
-            <div className="stat-card stat-card--songs">
-              <div className="stat-card__icon"><Music2 size={20} /></div>
-              <div className="stat-card__info">
-                <span className="stat-card__value">{stats.totalSongs || 0}</span>
-                <span className="stat-card__label">Song Requests</span>
-              </div>
-            </div>
-          </div>
-
-          {/* Charts & Meals Row */}
-          <div className="dashboard__charts">
-            <div className="chart-card" id="dash-response-rate">
-              <h3 className="chart-card__title">Response Rate</h3>
-              <div className="chart-card__bar-wrap">
-                <div className="chart-card__bar">
-                  <div className="chart-card__bar-fill chart-card__bar-fill--attending" style={{ width: `${stats.total > 0 ? (stats.attending / stats.total) * 100 : 0}%` }} />
-                  <div className="chart-card__bar-fill chart-card__bar-fill--declined" style={{ width: `${stats.total > 0 ? (stats.declined / stats.total) * 100 : 0}%` }} />
-                </div>
-                <div className="chart-card__legend">
-                  <span className="chart-card__legend-item"><span className="chart-card__dot chart-card__dot--attending" /> Attending ({stats.attending})</span>
-                  <span className="chart-card__legend-item"><span className="chart-card__dot chart-card__dot--declined" /> Declined ({stats.declined})</span>
-                  <span className="chart-card__legend-item"><span className="chart-card__dot chart-card__dot--pending" /> Pending ({stats.pending})</span>
+          {(activeTab === 'overview' || activeTab === 'guests') && (
+            <div className="dashboard__stats" id="dash-stats">
+              <div className="stat-card stat-card--total" onClick={() => setActiveTab('guests')} style={{ cursor: 'pointer' }}>
+                <div className="stat-card__icon"><Users size={20} /></div>
+                <div className="stat-card__info">
+                  <span className="stat-card__value">{stats.total}</span>
+                  <span className="stat-card__label">Total Invited</span>
                 </div>
               </div>
-              <div className="chart-card__percent">
-                <TrendingUp size={16} />
-                <span>{stats.attendingPercent}% response rate</span>
+              <div className="stat-card stat-card--attending" onClick={() => setActiveTab('guests')} style={{ cursor: 'pointer' }}>
+                <div className="stat-card__icon"><UserCheck size={20} /></div>
+                <div className="stat-card__info">
+                  <span className="stat-card__value">{stats.attending}</span>
+                  <span className="stat-card__label">Attending</span>
+                </div>
+                <span className="stat-card__badge">{stats.totalGuests} guests</span>
+              </div>
+              <div className="stat-card stat-card--declined" onClick={() => setActiveTab('guests')} style={{ cursor: 'pointer' }}>
+                <div className="stat-card__icon"><UserX size={20} /></div>
+                <div className="stat-card__info">
+                  <span className="stat-card__value">{stats.declined}</span>
+                  <span className="stat-card__label">Declined</span>
+                </div>
+              </div>
+              <div className="stat-card stat-card--pending" onClick={() => setActiveTab('guests')} style={{ cursor: 'pointer' }}>
+                <div className="stat-card__icon"><Clock size={20} /></div>
+                <div className="stat-card__info">
+                  <span className="stat-card__value">{stats.pending}</span>
+                  <span className="stat-card__label">Pending</span>
+                </div>
+              </div>
+              <div className="stat-card stat-card--songs" onClick={() => setActiveTab('overview')} style={{ cursor: 'pointer' }}>
+                <div className="stat-card__icon"><Music2 size={20} /></div>
+                <div className="stat-card__info">
+                  <span className="stat-card__value">{stats.totalSongs || 0}</span>
+                  <span className="stat-card__label">Song Requests</span>
+                </div>
               </div>
             </div>
+          )}
 
-            <div className="chart-card" id="dash-meals">
-              <h3 className="chart-card__title">Meal Preferences</h3>
-              {Object.keys(stats.meals).length > 0 ? (
-                <div className="chart-card__pie-wrap">
-                  <MiniPieChart data={stats.meals} />
-                  <div className="chart-card__pie-legend">
-                    {Object.entries(stats.meals).map(([meal, count]) => (
-                      <div key={meal} className="chart-card__pie-item">
-                        <span className="chart-card__dot" style={{ background: getMealColor(meal) }} />
-                        <span>{meal.charAt(0).toUpperCase() + meal.slice(1)}</span>
-                        <span className="chart-card__pie-count">{count}</span>
-                      </div>
-                    ))}
+          {/* Overview Tab Content */}
+          {activeTab === 'overview' && (
+            <>
+              {/* Charts & Meals Row */}
+              <div className="dashboard__charts">
+                <div className="chart-card" id="dash-response-rate">
+                  <h3 className="chart-card__title">Response Rate</h3>
+                  <div className="chart-card__bar-wrap">
+                    <div className="chart-card__bar">
+                      <div className="chart-card__bar-fill chart-card__bar-fill--attending" style={{ width: `${stats.total > 0 ? (stats.attending / stats.total) * 100 : 0}%` }} />
+                      <div className="chart-card__bar-fill chart-card__bar-fill--declined" style={{ width: `${stats.total > 0 ? (stats.declined / stats.total) * 100 : 0}%` }} />
+                    </div>
+                    <div className="chart-card__legend">
+                      <span className="chart-card__legend-item"><span className="chart-card__dot chart-card__dot--attending" /> Attending ({stats.attending})</span>
+                      <span className="chart-card__legend-item"><span className="chart-card__dot chart-card__dot--declined" /> Declined ({stats.declined})</span>
+                      <span className="chart-card__legend-item"><span className="chart-card__dot chart-card__dot--pending" /> Pending ({stats.pending})</span>
+                    </div>
+                  </div>
+                  <div className="chart-card__percent">
+                    <TrendingUp size={16} />
+                    <span>{stats.attendingPercent}% response rate</span>
                   </div>
                 </div>
-              ) : (
-                <div style={{ padding: '2rem', textAlign: 'center', color: 'var(--color-muted)', fontSize: '0.9rem' }}>
-                  No meal selections yet
-                </div>
-              )}
-            </div>
-          </div>
 
-          {/* Guest List Table */}
-          <div className="dashboard__table-section" id="dash-guest-list">
-            <div className="dashboard__table-header">
-              <h3 className="dashboard__table-title font-heading">Guest List</h3>
-              <div className="dashboard__table-controls">
-                <div className="dashboard__search">
-                  <Search size={16} />
-                  <input
-                    type="text"
-                    placeholder="Search guests..."
-                    value={searchQuery}
-                    onChange={e => setSearchQuery(e.target.value)}
-                    className="dashboard__search-input"
-                    id="dash-search"
-                  />
-                </div>
-                <div className="dashboard__filters">
-                  {['all', 'attending', 'declined', 'pending'].map(status => (
-                    <button
-                      key={status}
-                      className={`dashboard__filter ${filterStatus === status ? 'dashboard__filter--active' : ''}`}
-                      onClick={() => setFilterStatus(status)}
-                      id={`dash-filter-${status}`}
-                    >
-                      {status.charAt(0).toUpperCase() + status.slice(1)}
-                    </button>
-                  ))}
-                </div>
-                <button className="btn btn-secondary btn-sm" onClick={exportCSV} id="dash-export">
-                  <Download size={14} /> Export CSV
-                </button>
-              </div>
-            </div>
-
-            <div className="dashboard__table-wrap">
-              <table className="dashboard__table">
-                <thead>
-                  <tr>
-                    <th>Guest</th>
-                    <th>Email</th>
-                    <th>RSVP</th>
-                    <th>Meal</th>
-                    <th>Guests</th>
-                    <th>Song Request</th>
-                    <th>Message</th>
-                    <th></th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {filteredGuests.map(guest => (
-                    <tr key={guest.id}>
-                      <td className="dashboard__td-name">{guest.name}</td>
-                      <td className="dashboard__td-email">{guest.email}</td>
-                      <td>
-                        <span className={`dashboard__status dashboard__status--${guest.rsvp}`}>
-                          {guest.rsvp}
-                        </span>
-                      </td>
-                      <td>{guest.meal || '—'}</td>
-                      <td>{guest.guests}</td>
-                      <td className="dashboard__td-song">
-                        {guest.songRequest ? (
-                          <span className="dashboard__song-badge">
-                            <Music2 size={12} />
-                            {guest.songRequest}
-                          </span>
-                        ) : '—'}
-                      </td>
-                      <td className="dashboard__td-message">{guest.message || '—'}</td>
-                      <td>
-                        <button
-                          className="dashboard__delete-btn"
-                          onClick={() => handleDeleteGuest(guest.id)}
-                          title="Remove guest"
-                          style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--color-muted)', padding: '4px', borderRadius: '4px', transition: 'color 0.2s' }}
-                        >
-                          <Trash2 size={14} />
-                        </button>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-              {filteredGuests.length === 0 && (
-                <div className="dashboard__empty">
-                  <p>{guests.length === 0 ? 'No RSVPs received yet. Share your wedding link to start collecting responses!' : 'No guests match your search.'}</p>
-                </div>
-              )}
-            </div>
-          </div>
-
-          {/* Song Requests Panel */}
-          <div className="dashboard__songs-section" id="dash-songs">
-            <div className="dashboard__songs-header">
-              <h3 className="dashboard__table-title font-heading">
-                <Music2 size={20} /> Song Requests
-              </h3>
-              <span className="dashboard__songs-count">{songs.length} {songs.length === 1 ? 'song' : 'songs'}</span>
-            </div>
-            {songs.length > 0 ? (
-              <div className="dashboard__songs-grid">
-                {songs.map((song, idx) => {
-                  const parts = song.songRequest.split(' — ');
-                  const title = parts[0];
-                  const artist = parts[1] || null;
-                  return (
-                    <div key={idx} className="song-card" id={`song-card-${idx}`}>
-                      <div className="song-card__icon">
-                        <Music2 size={18} />
-                      </div>
-                      <div className="song-card__info">
-                        <span className="song-card__title">{title}</span>
-                        {artist && <span className="song-card__artist">{artist}</span>}
-                        <span className="song-card__guest">Requested by {song.guestName}</span>
+                <div className="chart-card" id="dash-meals">
+                  <h3 className="chart-card__title">Meal Preferences</h3>
+                  {Object.keys(stats.meals).length > 0 ? (
+                    <div className="chart-card__pie-wrap">
+                      <MiniPieChart data={stats.meals} />
+                      <div className="chart-card__pie-legend">
+                        {Object.entries(stats.meals).map(([meal, count]) => (
+                          <div key={meal} className="chart-card__pie-item">
+                            <span className="chart-card__dot" style={{ background: getMealColor(meal) }} />
+                            <span>{meal.charAt(0).toUpperCase() + meal.slice(1)}</span>
+                            <span className="chart-card__pie-count">{count}</span>
+                          </div>
+                        ))}
                       </div>
                     </div>
-                  );
-                })}
+                  ) : (
+                    <div style={{ padding: '2rem', textAlign: 'center', color: 'var(--color-muted)', fontSize: '0.9rem' }}>
+                      No meal selections yet
+                    </div>
+                  )}
+                </div>
               </div>
-            ) : (
-              <div className="dashboard__songs-empty">
-                <Music2 size={40} style={{ opacity: 0.2 }} />
-                <p>No song requests yet. They'll appear here after guests RSVP!</p>
+
+              {/* Song Requests Panel */}
+              <div className="dashboard__songs-section" id="dash-songs">
+                <div className="dashboard__songs-header">
+                  <h3 className="dashboard__table-title font-heading">
+                    <Music2 size={20} /> Song Requests
+                  </h3>
+                  <span className="dashboard__songs-count">{songs.length} {songs.length === 1 ? 'song' : 'songs'}</span>
+                </div>
+                {songs.length > 0 ? (
+                  <div className="dashboard__songs-grid">
+                    {songs.map((song, idx) => {
+                      const parts = song.songRequest.split(' — ');
+                      const title = parts[0];
+                      const artist = parts[1] || null;
+                      return (
+                        <div key={idx} className="song-card" id={`song-card-${idx}`}>
+                          <div className="song-card__icon">
+                            <Music2 size={18} />
+                          </div>
+                          <div className="song-card__info">
+                            <span className="song-card__title">{title}</span>
+                            {artist && <span className="song-card__artist">{artist}</span>}
+                            <span className="song-card__guest">Requested by {song.guestName}</span>
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                ) : (
+                  <div className="dashboard__songs-empty">
+                    <Music2 size={40} style={{ opacity: 0.2 }} />
+                    <p>No song requests yet. They'll appear here after guests RSVP!</p>
+                  </div>
+                )}
               </div>
-            )}
-          </div>
+            </>
+          )}
+
+          {/* Guest List Tab Content */}
+          {activeTab === 'guests' && (
+            <div className="dashboard__table-section" id="dash-guest-list">
+              <div className="dashboard__table-header">
+                <h3 className="dashboard__table-title font-heading">Guest List</h3>
+                <div className="dashboard__table-controls">
+                  <div className="dashboard__search">
+                    <Search size={16} />
+                    <input
+                      type="text"
+                      placeholder="Search guests..."
+                      value={searchQuery}
+                      onChange={e => setSearchQuery(e.target.value)}
+                      className="dashboard__search-input"
+                      id="dash-search"
+                    />
+                  </div>
+                  <div className="dashboard__filters">
+                    {['all', 'attending', 'declined', 'pending'].map(status => (
+                      <button
+                        key={status}
+                        className={`dashboard__filter ${filterStatus === status ? 'dashboard__filter--active' : ''}`}
+                        onClick={() => setFilterStatus(status)}
+                        id={`dash-filter-${status}`}
+                      >
+                        {status.charAt(0).toUpperCase() + status.slice(1)}
+                      </button>
+                    ))}
+                  </div>
+                  <button className="btn btn-secondary btn-sm" onClick={exportCSV} id="dash-export">
+                    <Download size={14} /> Export CSV
+                  </button>
+                </div>
+              </div>
+
+              <div className="dashboard__table-wrap">
+                <table className="dashboard__table">
+                  <thead>
+                    <tr>
+                      <th>Guest</th>
+                      <th>Email</th>
+                      <th>RSVP</th>
+                      <th>Meal</th>
+                      <th>Guests</th>
+                      <th>Song Request</th>
+                      <th>Message</th>
+                      <th></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {filteredGuests.map(guest => (
+                      <tr key={guest.id}>
+                        <td className="dashboard__td-name">{guest.name}</td>
+                        <td className="dashboard__td-email">{guest.email}</td>
+                        <td>
+                          <span className={`dashboard__status dashboard__status--${guest.rsvp}`}>
+                            {guest.rsvp}
+                          </span>
+                        </td>
+                        <td>{guest.meal || '—'}</td>
+                        <td>{guest.guests}</td>
+                        <td className="dashboard__td-song">
+                          {guest.songRequest ? (
+                            <span className="dashboard__song-badge">
+                              <Music2 size={12} />
+                              {guest.songRequest}
+                            </span>
+                          ) : '—'}
+                        </td>
+                        <td className="dashboard__td-message">{guest.message || '—'}</td>
+                        <td>
+                          <button
+                            className="dashboard__delete-btn"
+                            onClick={() => handleDeleteGuest(guest.id)}
+                            title="Remove guest"
+                            style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--color-muted)', padding: '4px', borderRadius: '4px', transition: 'color 0.2s' }}
+                          >
+                            <Trash2 size={14} />
+                          </button>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+                {filteredGuests.length === 0 && (
+                  <div className="dashboard__empty">
+                    <p>{guests.length === 0 ? 'No RSVPs received yet. Share your wedding link to start collecting responses!' : 'No guests match your search.'}</p>
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
+
+          {/* Settings Tab Content */}
+          {activeTab === 'settings' && (
+            <div className="dashboard__settings" id="dash-settings-panel">
+              <div className="settings-card">
+                <h3 className="settings-card__title font-heading">Wedding Website & RSVP Share Link</h3>
+                <p className="settings-card__desc">Share this link with your friends and family so they can view your website and RSVP online!</p>
+                
+                <div className="share-link-group">
+                  <input 
+                    type="text" 
+                    className="share-link-input" 
+                    value={`${window.location.origin}/preview?weddingId=${weddingId}`} 
+                    readOnly 
+                    id="settings-share-url"
+                  />
+                  <button 
+                    className="btn btn-primary share-link-btn" 
+                    onClick={() => {
+                      navigator.clipboard.writeText(`${window.location.origin}/preview?weddingId=${weddingId}`);
+                      alert('Wedding RSVP link copied to clipboard!');
+                    }}
+                    id="settings-copy-url"
+                  >
+                    Copy Link
+                  </button>
+                </div>
+              </div>
+
+              <div className="settings-grid">
+                <div className="settings-card">
+                  <h4 className="settings-card__subtitle font-heading">Design Customization</h4>
+                  <p className="settings-card__desc">Choose a different theme template, configure color palettes, or update wedding fonts.</p>
+                  <Link to="/customizer" className="btn btn-secondary btn-sm" style={{ marginTop: '1.25rem', width: 'fit-content' }}>
+                    Open Website Customizer
+                  </Link>
+                </div>
+
+                <div className="settings-card">
+                  <h4 className="settings-card__subtitle font-heading">Account & Wedding Info</h4>
+                  <div className="settings-info-list">
+                    <div className="settings-info-item">
+                      <span className="settings-info-label">Account Owner:</span>
+                      <span className="settings-info-value">{user?.name || 'Wedding Owner'} ({user?.email})</span>
+                    </div>
+                    <div className="settings-info-item">
+                      <span className="settings-info-label">Wedding ID:</span>
+                      <span className="settings-info-value font-mono">{weddingId}</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
         </main>
       </div>
     </div>

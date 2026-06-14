@@ -35,6 +35,46 @@ const FONT_PAIRINGS = [
   { name: 'Romantic Script', heading: 'Great Vibes', body: 'Lato' },
 ];
 
+function getThemeStyles(templateId, paletteIndex, fontIndex) {
+  const palette = COLOR_PALETTES[paletteIndex] || COLOR_PALETTES[0];
+  const font = FONT_PAIRINGS[fontIndex] || FONT_PAIRINGS[0];
+  const colors = palette.colors;
+
+  const styles = {
+    '--font-heading': `'${font.heading}', 'Cormorant Garamond', serif`,
+    '--font-body': `'${font.body}', 'Montserrat', sans-serif`,
+  };
+
+  const isDark = ['Navy', 'Midnight'].includes(palette.name);
+
+  if (templateId === 'serenity') {
+    styles['--ser-bg'] = colors[0];
+    styles['--ser-text'] = colors[1];
+    styles['--ser-accent'] = colors[2];
+    styles['--ser-muted'] = isDark ? 'rgba(255,255,255,0.6)' : colors[3];
+    styles['--ser-card'] = isDark ? colors[3] : '#FFFFFF';
+  } else if (templateId === 'opulence') {
+    styles['--op-bg'] = colors[0];
+    styles['--op-bg-alt'] = isDark ? colors[3] : '#16162B';
+    styles['--op-gold'] = colors[2];
+    styles['--op-gold-light'] = isDark ? '#FFF2CC' : colors[2];
+    styles['--op-gold-dark'] = isDark ? '#A67C00' : colors[2];
+    styles['--op-text'] = colors[1];
+    styles['--op-muted'] = isDark ? 'rgba(255,255,255,0.6)' : colors[3];
+  } else if (templateId === 'garden') {
+    styles['--gd-bg'] = colors[0];
+    styles['--gd-blush'] = isDark ? colors[3] : colors[3];
+    styles['--gd-pink'] = colors[2];
+    styles['--gd-sage'] = colors[2];
+    styles['--gd-sage-dark'] = colors[1];
+    styles['--gd-text'] = colors[1];
+    styles['--gd-muted'] = isDark ? 'rgba(255,255,255,0.6)' : colors[3];
+    styles['--gd-card'] = isDark ? colors[3] : '#FFFFFF';
+  }
+
+  return styles;
+}
+
 export default function Customizer() {
   const { templateId } = useParams();
   const { weddingId } = useAuth();
@@ -619,7 +659,7 @@ export default function Customizer() {
         {/* Preview */}
         {showPreview && (
           <main className="customizer__preview" id="customizer-preview">
-            <div className="customizer__preview-frame" id="pdf-content">
+            <div className="customizer__preview-frame" id="pdf-content" style={getThemeStyles(activeTemplate, selectedPalette, selectedFont)}>
               <TemplateComponent customData={customData} weddingId={weddingId} />
             </div>
           </main>

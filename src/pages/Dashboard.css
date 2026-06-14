@@ -665,3 +665,113 @@
     flex-direction: column;
   }
 }
+
+/* Sidebar Button Nav Link Override */
+button.dashboard__nav-link {
+  width: 100%;
+  border: none;
+  background: none;
+  cursor: pointer;
+  text-align: left;
+  font-family: inherit;
+}
+
+/* Settings Panel */
+.dashboard__settings {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+  animation: fadeIn 0.3s var(--ease-out);
+}
+
+.settings-card {
+  background: white;
+  padding: var(--space-6);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+  border: 1px solid rgba(0, 0, 0, 0.04);
+}
+
+.settings-card__title {
+  font-size: var(--text-lg);
+  font-weight: var(--weight-semibold);
+  margin-bottom: var(--space-2);
+  color: var(--text-primary);
+}
+
+.settings-card__subtitle {
+  font-size: var(--text-base);
+  font-weight: var(--weight-semibold);
+  margin-bottom: var(--space-3);
+  color: var(--text-primary);
+}
+
+.settings-card__desc {
+  font-size: var(--text-sm);
+  color: var(--text-muted);
+  line-height: var(--leading-relaxed);
+}
+
+.share-link-group {
+  display: flex;
+  gap: var(--space-3);
+  margin-top: var(--space-4);
+  max-width: 600px;
+}
+
+.share-link-input {
+  flex: 1;
+  padding: var(--space-3) var(--space-4);
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: var(--radius-md);
+  font-size: var(--text-sm);
+  color: var(--text-secondary);
+  background: var(--color-cream);
+  outline: none;
+}
+
+.share-link-btn {
+  white-space: nowrap;
+}
+
+.settings-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: var(--space-6);
+}
+
+.settings-info-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  margin-top: var(--space-4);
+}
+
+.settings-info-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: var(--space-2);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.04);
+  font-size: var(--text-sm);
+}
+
+.settings-info-label {
+  font-weight: var(--weight-medium);
+  color: var(--text-secondary);
+}
+
+.settings-info-value {
+  color: var(--text-primary);
+}
+
+@media (max-width: 576px) {
+  .share-link-group {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .share-link-btn {
+    width: 100%;
+  }
+}
+
