@@ -16,6 +16,27 @@ export const coupleData = {
     bio: 'A software engineer with a love for music and cooking. He proposed during a sunset sail off the coast of Santorini — the same place they had their first vacation together.',
   },
   hashtag: '#SophiaAndJamesForever',
+  avatars: {
+    bride: {
+      skinTone: '#D4A574',
+      hairStyle: 'wavy',
+      hairColor: '#3B2314',
+      outfitColor: '#FFFFFF',
+      outfitStyle: 'western',
+      height: 'average',
+      accessory: 'veil',
+    },
+    groom: {
+      skinTone: '#C19A6B',
+      hairStyle: 'short',
+      hairColor: '#1C1008',
+      outfitColor: '#1A1A2E',
+      outfitStyle: 'western',
+      height: 'tall',
+      accessory: 'bowtie',
+    },
+    showOnWebsite: true,
+  },
   story: [
     {
       date: 'June 2020',
@@ -242,6 +263,17 @@ export const templateThemes = [
     features: ['Parallax botanicals', 'Watercolor accents', 'Handwritten typography'],
     category: 'Romantic',
     popular: false,
+  },
+  {
+    id: 'desiroyal',
+    name: 'Desi Royal',
+    tagline: 'Indian Wedding Grandeur',
+    description: 'Celebrate with mandala motifs, rich reds & golds, and dedicated sections for Mehndi, Sangeet, Haldi & more.',
+    colors: ['#1A0A0A', '#C41E3A', '#D4AF37', '#800020', '#FDF5E6'],
+    fonts: ['Yatra One', 'Poppins'],
+    features: ['Mandala patterns', 'Indian ceremony sections', 'Gold ornamental borders'],
+    category: 'Cultural',
+    popular: true,
   },
 ];
 

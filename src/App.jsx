@@ -6,6 +6,7 @@ import Templates from './pages/Templates';
 import Customizer from './pages/Customizer';
 import Preview from './pages/Preview';
 import Dashboard from './pages/Dashboard';
+import AvatarStudio from './pages/AvatarStudio';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import Investors from './pages/Investors';
@@ -62,6 +63,9 @@ function AppRoutes() {
         } />
         <Route path="/dashboard" element={
           <ProtectedRoute><Dashboard /></ProtectedRoute>
+        } />
+        <Route path="/avatar-studio" element={
+          <ProtectedRoute><AvatarStudio /></ProtectedRoute>
         } />
       </Routes>
     </>

@@ -7,7 +7,7 @@ import ScrollReveal from '../components/ScrollReveal';
 import { templateThemes } from '../data/sampleData';
 import './Templates.css';
 
-const FILTERS = ['All', 'Modern', 'Luxury', 'Romantic'];
+const FILTERS = ['All', 'Modern', 'Luxury', 'Romantic', 'Cultural'];
 
 export default function Templates() {
   const [activeFilter, setActiveFilter] = useState('All');

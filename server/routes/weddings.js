@@ -27,6 +27,7 @@ router.get('/mine', requireAuth, (req, res) => {
       weddingDetails: JSON.parse(wedding.wedding_details),
       colorPalette: wedding.color_palette,
       fontPairing: wedding.font_pairing,
+      avatars: wedding.avatars ? JSON.parse(wedding.avatars) : null,
       createdAt: wedding.created_at,
       updatedAt: wedding.updated_at,
     });
@@ -83,7 +84,7 @@ router.put('/:id', requireAuth, (req, res) => {
       return res.status(404).json({ error: 'Wedding not found or access denied' });
     }
 
-    const { template, coupleData, weddingDetails, colorPalette, fontPairing } = req.body;
+    const { template, coupleData, weddingDetails, colorPalette, fontPairing, avatars } = req.body;
 
     run(
       `UPDATE weddings
@@ -92,6 +93,7 @@ router.put('/:id', requireAuth, (req, res) => {
            wedding_details = ?,
            color_palette = ?,
            font_pairing = ?,
+           avatars = ?,
            updated_at = datetime('now')
        WHERE id = ?`,
       [
@@ -100,6 +102,7 @@ router.put('/:id', requireAuth, (req, res) => {
         weddingDetails ? JSON.stringify(weddingDetails) : wedding.wedding_details,
         colorPalette ?? wedding.color_palette,
         fontPairing ?? wedding.font_pairing,
+        avatars ? JSON.stringify(avatars) : (wedding.avatars || '{}'),
         req.params.id,
       ]
     );
@@ -132,6 +135,7 @@ router.get('/:id/public', (req, res) => {
       weddingDetails: JSON.parse(wedding.wedding_details),
       colorPalette: wedding.color_palette,
       fontPairing: wedding.font_pairing,
+      avatars: wedding.avatars ? JSON.parse(wedding.avatars) : null,
       events,
     });
   } catch (err) {

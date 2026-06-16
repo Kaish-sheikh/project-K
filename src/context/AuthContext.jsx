@@ -20,11 +20,13 @@ export function AuthProvider({ children }) {
           setUser(data.user);
           setWeddingId(data.weddingId);
         })
-        .catch(() => {
-          // Token expired or invalid
-          api.logout();
-          setUser(null);
-          setWeddingId(null);
+        .catch((err) => {
+          // Only log out if token is expired or invalid (401)
+          if (err.status === 401) {
+            api.logout();
+            setUser(null);
+            setWeddingId(null);
+          }
         })
         .finally(() => setLoading(false));
     } else {

@@ -1,0 +1,199 @@
+/* =========================================
+   CoupleAvatars — Side-by-side avatars
+   ========================================= */
+
+.couple-avatars {
+  padding: 4rem 2rem;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.couple-avatars--light {
+  background: linear-gradient(180deg, rgba(245, 240, 235, 0.5), rgba(232, 221, 211, 0.3));
+}
+
+.couple-avatars--dark {
+  background: linear-gradient(180deg, rgba(26, 26, 46, 0.6), rgba(44, 44, 62, 0.4));
+}
+
+.couple-avatars--romantic {
+  background: linear-gradient(180deg, rgba(253, 246, 240, 0.5), rgba(242, 224, 208, 0.3));
+}
+
+.couple-avatars--indian {
+  background: linear-gradient(180deg, rgba(26, 10, 10, 0.95), rgba(128, 0, 32, 0.15), rgba(26, 10, 10, 0.9));
+}
+
+.couple-avatars--indian .couple-avatars__title {
+  color: #D4AF37;
+}
+
+.couple-avatars--indian .couple-avatars__name {
+  color: #FDF5E6;
+}
+
+.couple-avatars--indian .couple-avatars__heart {
+  color: #C41E3A;
+}
+
+.couple-avatars__inner {
+  max-width: 700px;
+  margin: 0 auto;
+}
+
+.couple-avatars__title {
+  font-size: 1.6rem;
+  margin-bottom: 2.5rem;
+  letter-spacing: 0.04em;
+  opacity: 0.85;
+}
+
+.couple-avatars--light .couple-avatars__title {
+  color: #2C3E50;
+}
+
+.couple-avatars--dark .couple-avatars__title {
+  color: #D4AF37;
+}
+
+.couple-avatars--romantic .couple-avatars__title {
+  color: #6B7F5E;
+}
+
+.couple-avatars__figures {
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  gap: 1rem;
+  position: relative;
+}
+
+.couple-avatars__person {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.couple-avatars__name {
+  font-size: 1.1rem;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+}
+
+.couple-avatars--light .couple-avatars__name {
+  color: #2C3E50;
+}
+
+.couple-avatars--dark .couple-avatars__name {
+  color: #F5F0EB;
+}
+
+.couple-avatars--romantic .couple-avatars__name {
+  color: #4A5C3F;
+}
+
+/* ---- Floating Hearts ---- */
+
+.couple-avatars__hearts {
+  position: relative;
+  width: 50px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  height: 180px;
+  pointer-events: none;
+}
+
+.couple-avatars__heart {
+  position: absolute;
+  font-size: 1rem;
+  color: #E8A0A0;
+  animation: heartFloat 4s ease-in-out infinite;
+  opacity: 0;
+}
+
+.couple-avatars__heart--1 {
+  bottom: 40%;
+  animation-delay: 0s;
+  font-size: 1.2rem;
+  color: #D4A0A0;
+}
+
+.couple-avatars__heart--2 {
+  bottom: 50%;
+  animation-delay: 0.8s;
+  font-size: 0.9rem;
+  color: #E8C4C4;
+}
+
+.couple-avatars__heart--3 {
+  bottom: 35%;
+  animation-delay: 1.6s;
+  font-size: 1.4rem;
+  color: #C07070;
+}
+
+.couple-avatars__heart--4 {
+  bottom: 55%;
+  animation-delay: 2.4s;
+  font-size: 0.75rem;
+  color: #F0B0B0;
+}
+
+.couple-avatars__heart--5 {
+  bottom: 45%;
+  animation-delay: 3.2s;
+  font-size: 1.1rem;
+  color: #D4A0A0;
+}
+
+@keyframes heartFloat {
+  0% {
+    opacity: 0;
+    transform: translateY(0) scale(0.5);
+  }
+  15% {
+    opacity: 1;
+    transform: translateY(-10px) scale(1);
+  }
+  50% {
+    opacity: 0.8;
+    transform: translateY(-40px) scale(1.1) translateX(5px);
+  }
+  85% {
+    opacity: 0.3;
+    transform: translateY(-70px) scale(0.9) translateX(-5px);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-90px) scale(0.5);
+  }
+}
+
+/* ---- Responsive ---- */
+
+@media (max-width: 600px) {
+  .couple-avatars {
+    padding: 3rem 1rem;
+  }
+
+  .couple-avatars__figures {
+    gap: 0.5rem;
+  }
+
+  .couple-avatars__hearts {
+    width: 30px;
+  }
+
+  .couple-avatars__title {
+    font-size: 1.3rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .couple-avatars__name {
+    font-size: 0.95rem;
+  }
+}

@@ -3,9 +3,10 @@ import { Link } from 'react-router-dom';
 import {
   Users, UserCheck, UserX, Clock, Search, Download,
   Filter, BarChart3, Eye, Settings, Bell, TrendingUp,
-  Utensils, ArrowLeft, Loader2, RefreshCw, LogOut, Trash2, Music2
+  Utensils, ArrowLeft, Loader2, RefreshCw, LogOut, Trash2, Music2, Sparkles
 } from 'lucide-react';
 import Navbar from '../components/Navbar';
+import AvatarStudio from './AvatarStudio';
 import { useAuth } from '../context/AuthContext';
 import * as api from '../api/client';
 import { getRSVPStats } from '../utils/helpers';
@@ -190,6 +191,13 @@ export default function Dashboard() {
             >
               <Eye size={18} /> My Website
             </a>
+            <button 
+              className={`dashboard__nav-link ${activeTab === 'avatar' ? 'dashboard__nav-link--active' : ''}`} 
+              onClick={() => setActiveTab('avatar')}
+              id="dash-nav-avatar"
+            >
+              <Sparkles size={18} /> Avatar Studio
+            </button>
             <button 
               className={`dashboard__nav-link ${activeTab === 'settings' ? 'dashboard__nav-link--active' : ''}`} 
               onClick={() => setActiveTab('settings')}
@@ -455,6 +463,13 @@ export default function Dashboard() {
                   </div>
                 )}
               </div>
+            </div>
+          )}
+
+          {/* Avatar Studio Tab Content */}
+          {activeTab === 'avatar' && (
+            <div className="dashboard__avatar-wrapper" style={{ height: '100%', minHeight: '600px', display: 'flex', flexDirection: 'column' }}>
+              <AvatarStudio embedded={true} />
             </div>
           )}
 

@@ -4,6 +4,7 @@ import { ArrowLeft, Wand2, Loader2, AlertCircle } from 'lucide-react';
 import Serenity from '../templates/Serenity';
 import Opulence from '../templates/Opulence';
 import Garden from '../templates/Garden';
+import DesiRoyal from '../templates/DesiRoyal';
 import * as api from '../api/client';
 import './Preview.css';
 
@@ -11,6 +12,7 @@ const TEMPLATES = {
   serenity: Serenity,
   opulence: Opulence,
   garden: Garden,
+  desiroyal: DesiRoyal,
 };
 
 const COLOR_PALETTES = [
@@ -63,6 +65,15 @@ function getThemeStyles(templateId, paletteIndex, fontIndex) {
     styles['--gd-text'] = colors[1];
     styles['--gd-muted'] = isDark ? 'rgba(255,255,255,0.6)' : colors[3];
     styles['--gd-card'] = isDark ? colors[3] : '#FFFFFF';
+  } else if (templateId === 'desiroyal') {
+    styles['--dr-bg'] = colors[0];
+    styles['--dr-red'] = colors[1];
+    styles['--dr-gold'] = colors[2];
+    styles['--dr-maroon'] = colors[3];
+    styles['--dr-bg-cream'] = colors[4] || '#FDF5E6';
+    styles['--dr-text'] = colors[4] || '#FDF5E6';
+    styles['--dr-text-dark'] = '#2C1810';
+    styles['--dr-muted'] = 'rgba(253, 245, 230, 0.6)';
   }
 
   return styles;
@@ -120,10 +131,16 @@ export default function Preview() {
     const TemplateComponent = TEMPLATES[templateName] || Serenity;
     const themeStyles = getThemeStyles(templateName, customWedding.colorPalette, customWedding.fontPairing);
 
+    // Merge avatars into coupleData so templates can render CoupleAvatars
+    const coupleWithAvatars = {
+      ...customWedding.coupleData,
+      avatars: customWedding.avatars || customWedding.coupleData?.avatars || null,
+    };
+
     return (
       <div style={themeStyles}>
         <TemplateComponent 
-          customData={{ couple: customWedding.coupleData, wedding: customWedding.weddingDetails }} 
+          customData={{ couple: coupleWithAvatars, wedding: customWedding.weddingDetails }} 
           weddingId={customWedding.id} 
         />
       </div>

@@ -8,7 +8,7 @@ import cors from 'cors';
 
 import { initDb, closeDb } from './db/database.js';
 import { securityHeaders, sanitizeBody } from './middleware/security.js';
-import { apiLimiter, authLimiter, rsvpLimiter } from './middleware/rateLimiter.js';
+import { apiLimiter, rsvpLimiter } from './middleware/rateLimiter.js';
 import {
   behaviorAnalysis,
   csrfTokenEndpoint,
@@ -76,8 +76,8 @@ app.get('/api/admin/threats', (req, res) => {
 // Routes (with per-route rate limiting)
 // ------------------------------------------
 
-// Auth routes — stricter rate limits (10 req/15 min)
-app.use('/api/auth', authLimiter, authRoutes);
+// Auth routes
+app.use('/api/auth', authRoutes);
 
 // Wedding routes — standard API limits
 app.use('/api/weddings', weddingRoutes);

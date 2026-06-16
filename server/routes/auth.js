@@ -8,13 +8,14 @@ import { v4 as uuidv4 } from 'uuid';
 import { run, getOne } from '../db/database.js';
 import { requireAuth, signToken } from '../middleware/auth.js';
 import { isValidEmail, isValidLength } from '../middleware/security.js';
+import { authLimiter } from '../middleware/rateLimiter.js';
 
 const router = Router();
 
 // ------------------------------------------
 // POST /api/auth/register
 // ------------------------------------------
-router.post('/register', async (req, res) => {
+router.post('/register', authLimiter, async (req, res) => {
   try {
     const { email, password, name } = req.body;
 
@@ -98,7 +99,7 @@ router.post('/register', async (req, res) => {
 // ------------------------------------------
 // POST /api/auth/login
 // ------------------------------------------
-router.post('/login', async (req, res) => {
+router.post('/login', authLimiter, async (req, res) => {
   try {
     const { email, password } = req.body;
 

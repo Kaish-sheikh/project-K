@@ -1,4 +1,5 @@
 import CountdownTimer from '../components/CountdownTimer';
+import CoupleAvatars from '../components/CoupleAvatars';
 import RSVPForm from '../components/RSVPForm';
 import Timeline from '../components/Timeline';
 import PhotoGallery from '../components/PhotoGallery';
@@ -48,6 +49,17 @@ export default function Garden({ customData = {}, weddingId }) {
           </ScrollReveal>
         </div>
       </section>
+
+      {/* Animated Couple Avatars */}
+      {couple.avatars?.showOnWebsite && (
+        <ScrollReveal>
+          <CoupleAvatars
+            avatars={couple.avatars}
+            coupleNames={{ partner1: couple.partner1.firstName, partner2: couple.partner2.firstName }}
+            variant="romantic"
+          />
+        </ScrollReveal>
+      )}
 
       {/* Our Story */}
       <section className="gd-section gd-section--blush" id="gd-story">

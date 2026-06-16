@@ -39,6 +39,13 @@ export async function initDb() {
     // Column already exists — safe to ignore
   }
 
+  try {
+    db.run(`ALTER TABLE weddings ADD COLUMN avatars TEXT DEFAULT '{}'`);
+    console.log('✓ Migration applied: avatars column added');
+  } catch (e) {
+    // Column already exists — safe to ignore
+  }
+
   saveDb();
 
   console.log('✓ Database initialized at', DB_PATH);
